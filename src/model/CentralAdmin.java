@@ -1,12 +1,18 @@
 package model;
 
 public class CentralAdmin extends User {
-    public CentralAdmin(String userId, String name, String email) {
-        super(userId, name, email, "ADMIN");
+    public CentralAdmin(int userId, String username, String fullName,
+                        String clubId, int failedAttempts, boolean blocked) {
+        super(userId, username, fullName, "ADMIN", clubId, failedAttempts, blocked);
     }
 
-    @Override
-    public String getDashboardTitle() {
-        return "CENTRAL ADMIN MENU - FEST CONVENER";
+    public CentralAdmin(int userId, String username, String fullName, int failedAttempts, boolean blocked) {
+        this(userId, username, fullName, null, failedAttempts, blocked);
     }
+
+    public CentralAdmin(String username, String name) {
+        this(0, username, name, 0, false);
+    }
+
+    @Override public String getDashboardTitle() { return "CENTRAL ADMIN"; }
 }

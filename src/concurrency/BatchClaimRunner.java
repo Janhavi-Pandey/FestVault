@@ -13,13 +13,21 @@ public class BatchClaimRunner {
 
     public static int runBatch(ClaimQueue queue, List<ExpenseClaimTask> tasks)
             throws InterruptedException, ExecutionException {
+        return runBatch(queue, tasks, 3);
+    }
+
+    public static int runBatch(ClaimQueue queue, List<ExpenseClaimTask> tasks, int threadCount)
+            throws InterruptedException, ExecutionException {
+        if (threadCount < 1 || threadCount > 100) {
+            throw new IllegalArgumentException("Thread count must be between 1 and 100.");
+        }
         AtomicInteger approvedCount = new AtomicInteger(0);
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
         Thread producerThread = new Thread(new ClaimProducer(queue, tasks), "Claim-Producer");
         producerThread.start();
 
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= threadCount; i++) {
             final String workerName = "Worker-" + i;
             executor.submit(() -> {
                 Thread.currentThread().setName(workerName);

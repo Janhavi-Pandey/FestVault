@@ -1,7 +1,5 @@
 package exception;
-
 public class InactiveAccountException extends RuntimeException {
-    public InactiveAccountException(String message) {
-        super(message);
-    }
+    private static final long serialVersionUID = 1L;
+    public InactiveAccountException(String message) { super(message); }
 }

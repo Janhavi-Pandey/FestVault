@@ -1,7 +1,5 @@
 package exception;
-
 public class AccountBlockedException extends RuntimeException {
-    public AccountBlockedException(String message) {
-        super(message);
-    }
+    private static final long serialVersionUID = 1L;
+    public AccountBlockedException(String message) { super(message); }
 }

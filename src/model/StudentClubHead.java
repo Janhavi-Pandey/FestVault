@@ -1,20 +1,18 @@
 package model;
 
 public class StudentClubHead extends User {
-    private final String clubId;
-    private final String passId;
+    private final String clubName;
 
-    public StudentClubHead(String userId, String name, String email, String clubId, String passId) {
-        super(userId, name, email, "STUDENT");
-        this.clubId = clubId;
-        this.passId = passId;
+    public StudentClubHead(int userId, String username, String fullName, String clubId,
+                           int failedAttempts, boolean blocked, String clubName) {
+        super(userId, username, fullName, "STUDENT", clubId, failedAttempts, blocked);
+        this.clubName = clubName;
     }
 
-    public String getClubId() { return clubId; }
-    public String getPassId() { return passId; }
-
-    @Override
-    public String getDashboardTitle() {
-        return "STUDENT CLUB HEAD MENU - " + clubId;
+    public StudentClubHead(String username, String studentName, String clubId, String clubName) {
+        this(0, username, studentName, clubId, 0, false, clubName);
     }
+
+    public String getClubName() { return clubName; }
+    @Override public String getDashboardTitle() { return "STUDENT CLUB HEAD - " + getName() + " | " + clubName; }
 }

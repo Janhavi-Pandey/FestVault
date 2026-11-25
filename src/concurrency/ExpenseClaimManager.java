@@ -6,40 +6,20 @@ import model.ClubAccount;
 
 import java.math.BigDecimal;
 
+/** Synchronizes withdrawals from the same team wallet during a batch. */
 public class ExpenseClaimManager {
-
-    public boolean processClaim(
-            ClubAccount account,
-            String claimId,
-            String teamName,
-            BigDecimal claimAmount,
-            String workerName
-    ) {
+    public boolean processClaim(ClubAccount account, String claimId, BigDecimal claimAmount) {
         synchronized (account) {
             if (account.getStatus() != AccountStatus.ACTIVE) {
-                throw new InactiveAccountException(
-                        "[" + workerName + "] " + claimId + " (" + teamName + ") BLOCKED: Account "
-                                + account.getAccountNo() + " is INACTIVE."
-                );
+                throw new InactiveAccountException("The selected team wallet is INACTIVE.");
             }
-
-            BigDecimal spendableBefore = account.getSpendableBalance();
-            if (claimAmount == null || claimAmount.compareTo(BigDecimal.ZERO) <= 0) {
-                System.out.println("[" + workerName + "] " + claimId + " (" + teamName + ") REJECTED: Invalid amount.");
+            if (claimAmount == null || claimAmount.compareTo(BigDecimal.ZERO) <= 0) return false;
+            if (account.getBalance().compareTo(claimAmount) < 0) {
+                System.out.println(claimId + " was rejected: insufficient team balance. Remaining Rs. " + account.getBalance());
                 return false;
             }
-
-            if (spendableBefore.compareTo(claimAmount) < 0) {
-                System.out.println("[" + workerName + "] " + claimId + " (" + teamName + ") REJECTED -> "
-                        + "Insufficient spendable funds (Rs. " + spendableBefore + " left)");
-                return false;
-            }
-
-            BigDecimal updatedBalance = account.getBalance().subtract(claimAmount);
-            account.setBalance(updatedBalance);
-
-            System.out.println("[" + workerName + "] " + claimId + " (" + teamName + ") APPROVED -> "
-                    + "New Spendable Balance: Rs. " + account.getSpendableBalance());
+            account.setBalance(account.getBalance().subtract(claimAmount));
+            System.out.println(claimId + " was approved. Remaining team balance: Rs. " + account.getBalance());
             return true;
         }
     }

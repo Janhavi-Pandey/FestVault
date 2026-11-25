@@ -1,0 +1,4 @@
+account_no,amount,description
+FV-1002,1250.00,Purchase of cables and adapters
+FV-1003,850.00,Printing of event posters
+INVALID-ACCOUNT,400.00,Invalid account row for import error handling

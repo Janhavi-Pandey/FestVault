@@ -1,7 +1,5 @@
 package exception;
-
 public class UnauthorizedTransferException extends RuntimeException {
-    public UnauthorizedTransferException(String message) {
-        super(message);
-    }
+    private static final long serialVersionUID = 1L;
+    public UnauthorizedTransferException(String message) { super(message); }
 }
